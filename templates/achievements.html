@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Achievements - Python LMS{% endblock %}
+{% block content %}
+<h1>🏆 Achievements</h1>
+<p>Earned: {{ earned }}/{{ total }}</p>
+<div class="progress-bar">
+    <div class="progress-fill" style="width: {{ pct }}%">{{ pct }}%</div>
+</div>
+
+<h2>✅ Unlocked</h2>
+{% for ach in unlocked %}
+<div class="achievement-card achievement-unlocked">
+    <div class="achievement-icon">{{ ach.icon }}</div>
+    <div>
+        <strong>{{ ach.name }}</strong>
+        <p style="color:#065f46;">{{ ach.description }}</p>
+    </div>
+</div>
+{% else %}
+<p>No achievements unlocked yet. Keep learning! 📚</p>
+{% endfor %}
+
+<h2>🔒 Locked</h2>
+{% for ach in locked %}
+<div class="achievement-card achievement-locked">
+    <div class="achievement-icon">🔒</div>
+    <div>
+        <strong>{{ ach.name }}</strong>
+        <p style="color:#6b7280;">{{ ach.description }}</p>
+    </div>
+</div>
+{% else %}
+<p>🎉 ALL ACHIEVEMENTS UNLOCKED! You're amazing!</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Python LMS{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; }
+        .container { max-width: 960px; margin: 0 auto; padding: 20px; }
+        .navbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: white; text-decoration: none; font-weight: 500; margin-left: 20px; }
+        .navbar a:hover { text-decoration: underline; }
+        .brand { font-size: 1.4rem; font-weight: 700; }
+        .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; transition: transform 0.1s; }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-secondary { background: #e5e7eb; color: #374151; }
+        .progress-bar { background: #e5e7eb; border-radius: 8px; height: 24px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: 600; transition: width 0.5s ease; }
+        .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .stat-card { text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: 700; color: #667eea; }
+        .stat-label { color: #6b7280; font-size: 0.9rem; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-neutral { background: #e5e7eb; color: #374151; }
+        .lesson-content { background: #f8fafc; border-radius: 8px; padding: 20px; font-family: 'Consolas', 'Monaco', monospace; white-space: pre-wrap; line-height: 1.8; }
+        .question-card { background: #f8fafc; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+        .option-label { display: block; padding: 10px; margin: 6px 0; border-radius: 6px; background: white; border: 2px solid #e5e7eb; cursor: pointer; transition: all 0.2s; }
+        .option-label:hover { border-color: #667eea; }
+        .option-input { margin-right: 8px; }
+        .correct { color: #10b981; font-weight: 600; }
+        .incorrect { color: #ef4444; font-weight: 600; }
+        .explanation { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px; margin-top: 8px; border-radius: 0 6px 6px 0; }
+        .achievement-card { display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 8px; margin-bottom: 12px; }
+        .achievement-unlocked { background: #d1fae5; }
+        .achievement-locked { background: #f3f4f6; opacity: 0.7; }
+        .achievement-icon { font-size: 2rem; }
+        .certificate-box { background: linear-gradient(135deg, #fef9c3 0%, #fde68a 100%); border: 3px solid #f59e0b; border-radius: 12px; padding: 40px; text-align: center; }
+        .certificate-text { font-family: 'Georgia', serif; white-space: pre-wrap; text-align: left; background: white; padding: 30px; border-radius: 8px; margin-top: 20px; }
+        h1 { font-size: 1.8rem; margin-bottom: 16px; }
+        h2 { font-size: 1.4rem; margin-bottom: 12px; color: #1f2937; }
+        h3 { font-size: 1.1rem; margin-bottom: 8px; color: #374151; }
+        .login-box { max-width: 400px; margin: 60px auto; }
+        .form-input { width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 1rem; margin-bottom: 12px; }
+        .form-input:focus { outline: none; border-color: #667eea; }
+        .text-center { text-align: center; }
+        .mb-2 { margin-bottom: 12px; }
+        .mt-2 { margin-top: 12px; }
+    </style>
+</head>
+<body>
+    {% if session.username %}
+    <nav class="navbar">
+        <div class="container">
+            <span class="brand">📚 Python LMS</span>
+            <div>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('achievements') }}">Achievements</a>
+                <a href="{{ url_for('history') }}">History</a>
+                <a href="{{ url_for('certificate') }}">Certificate</a>
+                <a href="{{ url_for('logout') }}">Logout ({{ session.username }})</a>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

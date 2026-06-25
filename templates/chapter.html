@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ chapter.title }} - Python LMS{% endblock %}
+{% block content %}
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-2">← Back to Dashboard</a>
+<h1>📖 {{ chapter.title }}</h1>
+<p style="color:#6b7280;">{{ chapter.description }}</p>
+
+<h2>📝 Lessons</h2>
+{% for lesson in chapter.lessons %}
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3>{{ lesson.title }}</h3>
+        {% if lesson.lesson_id in progress.lessons_read %}
+            <span class="badge badge-success">✅ Read</span>
+        {% else %}
+            <span class="badge badge-neutral">⬜ Unread</span>
+        {% endif %}
+    </div>
+    <a href="{{ url_for('lesson', chapter_id=chapter.chapter_id, lesson_id=lesson.lesson_id) }}" class="btn btn-primary">Start Lesson →</a>
+</div>
+{% endfor %}
+
+<h2>📋 Quizzes</h2>
+{% for quiz in chapter.quizzes %}
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3>{{ quiz.title }}</h3>
+        {% set attempts = progress.quiz_attempts.get(quiz.quiz_id, []) %}
+        {% if attempts %}
+            {% set best = attempts|map(attribute='score')|max %}
+            {% if attempts[-1].passed %}
+                <span class="badge badge-success">✅ Passed (Best: {{ "%.0f"|format(best) }}%)</span>
+            {% else %}
+                <span class="badge badge-warning">❌ Failed (Best: {{ "%.0f"|format(best) }}%)</span>
+            {% endif %}
+        {% else %}
+            <span class="badge badge-neutral">⬜ Not Attempted</span>
+        {% endif %}
+    </div>
+    <p>Passing Score: {{ quiz.passing_score }}% | Questions: {{ quiz.questions|length }}</p>
+    <a href="{{ url_for('quiz', chapter_id=chapter.chapter_id, quiz_id=quiz.quiz_id) }}" class="btn btn-primary">Take Quiz →</a>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Quiz Results - Python LMS{% endblock %}
+{% block content %}
+<a href="{{ url_for('chapter_detail', chapter_id=chapter.chapter_id) }}" class="btn btn-secondary mb-2">← Back to Chapter</a>
+<h1>📊 Quiz Results</h1>
+
+<div class="card text-center" style="{% if passed %}background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);{% else %}background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);{% endif %}">
+    <h2>{{ quiz.title }}</h2>
+    <p style="font-size: 2rem; font-weight: 700;">{{ correct }}/{{ total }} ({{ "%.1f"|format(score) }}%)</p>
+    <p>Passing Score: {{ quiz.passing_score }}%</p>
+    {% if passed %}
+        <p style="font-size: 1.5rem; color: #065f46;">✅ PASSED! 🎉</p>
+    {% else %}
+        <p style="font-size: 1.5rem; color: #991b1b;">❌ FAILED</p>
+        <p>Don't worry! You can retake this quiz or try a different version.</p>
+    {% endif %}
+</div>
+
+{% if newly_unlocked %}
+<div class="card" style="background: linear-gradient(135deg, #fef9c3 0%, #fde68a 100%); border: 2px solid #f59e0b;">
+    <h2>🎊 Achievement Unlocked!</h2>
+    {% for ach in newly_unlocked %}
+    <p style="font-size: 1.2rem;">{{ ach.icon }} <strong>{{ ach.name }}</strong></p>
+    <p>{{ ach.description }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<h2>Question Breakdown</h2>
+{% for r in results %}
+<div class="card">
+    <p><strong>Q{{ loop.index }}.</strong> {{ r.question }}</p>
+    {% if r.is_correct %}
+        <p class="correct">✅ Correct: {{ r.your_answer }}</p>
+    {% else %}
+        <p class="incorrect">❌ Your answer: {{ r.your_answer }}</p>
+        <p class="correct">✅ Correct answer: {{ r.correct_answer }}</p>
+    {% endif %}
+    <div class="explanation">💡 {{ r.explanation }}</div>
+</div>
+{% endfor %}
+
+<div class="mt-2">
+    <a href="{{ url_for('chapter_detail', chapter_id=chapter.chapter_id) }}" class="btn btn-primary">Back to Chapter →</a>
+</div>
+{% endblock %}

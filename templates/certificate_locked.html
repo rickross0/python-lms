@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Certificate - Python LMS{% endblock %}
+{% block content %}
+<h1>🎓 Certificate</h1>
+
+<div class="card text-center" style="background: #fef3c7;">
+    <h2>📋 Certificate Requirements</h2>
+    <p>You must complete ALL chapters to earn your certificate.</p>
+    <p>Current Progress: {{ completed }}/{{ total }} chapters</p>
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ (completed/total*100)|int }}%">{{ (completed/total*100)|int }}%</div>
+    </div>
+</div>
+
+<h2>Chapter Status</h2>
+{% for item in chapters_status %}
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span>{{ item.chapter.title }}</span>
+        {% if item.passed %}
+            <span class="badge badge-success">✅ Completed</span>
+        {% else %}
+            <span class="badge badge-neutral">⬜ Incomplete</span>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+<p class="mt-2">Complete the remaining {{ total - completed }} chapter(s) to earn your certificate! 🏆</p>
+{% endblock %}

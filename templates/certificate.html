@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Certificate - Python LMS{% endblock %}
+{% block content %}
+<h1>🎓 Certificate</h1>
+
+<div class="certificate-box">
+    <h2>🏆 Congratulations, {{ student.username }}! 🏆</h2>
+    <p>You have successfully earned your certificate of completion! 🎉</p>
+</div>
+
+<div class="certificate-text">{{ cert_text }}</div>
+
+<div class="mt-2 text-center">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Dashboard →</a>
+</div>
+{% endblock %}

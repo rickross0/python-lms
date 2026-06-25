@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ lesson.title }} - Python LMS{% endblock %}
+{% block content %}
+<a href="{{ url_for('chapter_detail', chapter_id=chapter.chapter_id) }}" class="btn btn-secondary mb-2">← Back to Chapter</a>
+<h1>📝 {{ lesson.title }}</h1>
+<div class="lesson-content">{{ lesson.content }}</div>
+
+{% if newly_unlocked %}
+<div class="card" style="background: linear-gradient(135deg, #fef9c3 0%, #fde68a 100%); border: 2px solid #f59e0b; margin-top: 20px;">
+    <h2>🎊 Achievement Unlocked!</h2>
+    {% for ach in newly_unlocked %}
+    <p style="font-size: 1.2rem;">{{ ach.icon }} <strong>{{ ach.name }}</strong></p>
+    <p>{{ ach.description }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="mt-2">
+    <a href="{{ url_for('chapter_detail', chapter_id=chapter.chapter_id) }}" class="btn btn-primary">Back to Chapter →</a>
+</div>
+{% endblock %}

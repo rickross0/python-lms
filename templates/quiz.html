@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ quiz.title }} - Python LMS{% endblock %}
+{% block content %}
+<a href="{{ url_for('chapter_detail', chapter_id=chapter.chapter_id) }}" class="btn btn-secondary mb-2">← Back to Chapter</a>
+<h1>📋 {{ quiz.title }}</h1>
+<p>Passing Score: <strong>{{ quiz.passing_score }}%</strong> | Questions: {{ quiz.questions|length }}</p>
+
+<form method="POST" action="{{ url_for('quiz', chapter_id=chapter.chapter_id, quiz_id=quiz.quiz_id) }}">
+{% for question in quiz.questions %}
+<div class="question-card">
+    <p><strong>Q{{ loop.index }}.</strong> {{ question.text }}</p>
+    {% for option in question.options %}
+    <label class="option-label">
+        <input type="radio" name="q_{{ loop.index0 }}" value="{{ loop.index }}" class="option-input" required>
+        {{ option }}
+    </label>
+    {% endfor %}
+</div>
+{% endfor %}
+<button type="submit" class="btn btn-success" style="width:100%; font-size:1.1rem;">✅ Submit Quiz</button>
+</form>
+{% endblock %}

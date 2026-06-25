@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Quiz History - Python LMS{% endblock %}
+{% block content %}
+<h1>📋 Quiz History</h1>
+
+{% if history %}
+<p>Total Attempts: {{ history|length }}</p>
+{% for attempt in history %}
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3>{% if attempt.passed %}✅{% else %}❌{% endif %} {{ attempt.quiz_id }}</h3>
+        <span class="badge {% if attempt.passed %}badge-success{% else %}badge-warning{% endif %}">
+            {{ "PASSED" if attempt.passed else "FAILED" }}
+        </span>
+    </div>
+    <p>Score: {{ attempt.correct }}/{{ attempt.total_questions }} ({{ "%.1f"|format(attempt.score) }}%)</p>
+    <p style="color:#6b7280; font-size:0.9rem;">{{ attempt.timestamp[:19] }}</p>
+</div>
+{% endfor %}
+{% else %}
+<p>No quiz attempts yet. Start studying to take quizzes! 📚</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Python LMS{% endblock %}
+{% block content %}
+<h1>📊 Dashboard</h1>
+<p>Welcome back, <strong>{{ student.username }}</strong>! 👋</p>
+
+<div class="card">
+    <h2>📈 Overall Progress</h2>
+    <p>Chapters Completed: {{ completed }}/{{ total_chapters }} ({{ pct }}%)</p>
+    <div class="progress-bar">
+        <div class="progress-fill" style="width: {{ pct }}%">{{ pct }}%</div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="card stat-card">
+        <div class="stat-number">{{ achievements_count }}/{{ total_achievements }}</div>
+        <div class="stat-label">Achievements Earned</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number">{{ total_quizzes_taken }}</div>
+        <div class="stat-label">Quizzes Taken</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number">{{ total_passed }}</div>
+        <div class="stat-label">Quizzes Passed</div>
+    </div>
+    <div class="card stat-card">
+        <div class="stat-number">{{ streak }}</div>
+        <div class="stat-label">Pass Streak 🔥</div>
+    </div>
+</div>
+
+{% if avg_score > 0 %}
+<div class="card stat-card">
+    <div class="stat-number">{{ "%.1f"|format(avg_score) }}%</div>
+    <div class="stat-label">Average Quiz Score</div>
+</div>
+{% endif %}
+
+<h2>📖 Course Chapters</h2>
+{% for item in chapters_data %}
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3>{{ item.chapter.title }}</h3>
+        {% if item.progress.status == 'completed' %}
+            <span class="badge badge-success">✅ Completed ({{ "%.0f"|format(item.progress.best_quiz_score) }}%)</span>
+        {% elif item.progress.status == 'in_progress' %}
+            <span class="badge badge-warning">🔶 In Progress</span>
+        {% else %}
+            <span class="badge badge-neutral">⬜ Not Started</span>
+        {% endif %}
+    </div>
+    <p style="color:#6b7280;">{{ item.chapter.description }}</p>
+    <p>Lessons read: {{ item.progress.lessons_read|length }}/{{ item.chapter.lessons|length }}</p>
+    <a href="{{ url_for('chapter_detail', chapter_id=item.chapter.chapter_id) }}" class="btn btn-primary">Open Chapter →</a>
+</div>
+{% endfor %}
+{% endblock %}
